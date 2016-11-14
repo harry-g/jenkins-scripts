@@ -1,0 +1,29 @@
+stage ('Production') {
+    build 'build-chocolate'
+}
+
+stage ('Acceptance Tests') {
+    build 'test-chocolate'
+}
+
+stage ('Packaging') {
+    node ('Tools:packaging') {
+        echo "Wrapping the chocolate bar now into ${noAluminium.toBoolean() ? 'plastic' : 'aluminium'} foil"
+        echo 'Wrapping the chocolate bar now into paper'
+        echo "Packaging $boxSize chocolate bars into a box"
+    }
+}
+
+stage ('Manual Approval') {
+    if (env.BUILD_NUMBER.toInteger() % 10 == 0) {
+        timeout(time: 1, unit: 'HOURS') {
+            input message: 'Is this chocolate packed OK and tasty?'
+        }
+    }
+}
+
+stage ('Delivery') {
+    node ('Tools:delivery') {
+        echo "Delivering boxes to $hauler..."
+    }
+}

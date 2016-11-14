@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject plugin="workflow-multibranch@2.9.2">
+  <actions/>
+  <description></description>
+  <displayName>Multibranch Factory</displayName>
+  <properties>
+    <com.cloudbees.hudson.plugins.folder.properties.EnvVarsFolderProperty plugin="cloudbees-folders-plus@3.0">
+      <properties></properties>
+    </com.cloudbees.hudson.plugins.folder.properties.EnvVarsFolderProperty>
+    <org.jenkinsci.plugins.workflow.libs.FolderLibraries plugin="workflow-cps-global-lib@2.4">
+      <libraries>
+        <org.jenkinsci.plugins.workflow.libs.LibraryConfiguration>
+          <name>chocolate-lib</name>
+          <retriever class="org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever">
+            <scm class="jenkins.scm.impl.subversion.SubversionSCMSource" plugin="subversion@2.7.1">
+              <id>9027a2e4-7c9d-463d-a1e6-7e52fb5f2456</id>
+              <remoteBase>https://rb-svn4.de.bosch.com/svn/t05_Build/trunk/Jenkins/scripts/demo/chocolate-lib/</remoteBase>
+              <credentialsId>1e79b98d-3a3c-4f79-b3a9-6b4c5a1f11ec</credentialsId>
+              <includes>trunk,branches/*,tags/*,sandbox/*</includes>
+              <excludes></excludes>
+            </scm>
+          </retriever>
+          <defaultVersion>trunk</defaultVersion>
+          <implicit>true</implicit>
+          <allowVersionOverride>true</allowVersionOverride>
+        </org.jenkinsci.plugins.workflow.libs.LibraryConfiguration>
+      </libraries>
+    </org.jenkinsci.plugins.workflow.libs.FolderLibraries>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.config.FolderConfig plugin="pipeline-model-definition@0.5">
+      <dockerLabel></dockerLabel>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.config.FolderConfig>
+  </properties>
+  <views>
+    <hudson.model.AllView>
+      <owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../../.."/>
+      <name>All</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+    </hudson.model.AllView>
+  </views>
+  <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
+  <healthMetrics>
+    <com.cloudbees.hudson.plugins.folder.health.WorstChildHealthMetric plugin="cloudbees-folder@5.13"/>
+    <com.cloudbees.hudson.plugins.folder.health.AverageChildHealthMetric plugin="cloudbees-folders-plus@3.0"/>
+    <com.cloudbees.hudson.plugins.folder.health.JobStatusHealthMetric plugin="cloudbees-folders-plus@3.0">
+      <success>true</success>
+      <failure>true</failure>
+      <unstable>true</unstable>
+      <unbuilt>true</unbuilt>
+      <countVirginJobs>false</countVirginJobs>
+    </com.cloudbees.hudson.plugins.folder.health.JobStatusHealthMetric>
+    <com.cloudbees.hudson.plugins.folder.health.ProjectEnabledHealthMetric plugin="cloudbees-folders-plus@3.0"/>
+  </healthMetrics>
+  <icon class="com.cloudbees.hudson.plugins.folder.icons.UrlFolderIcon" plugin="cloudbees-folders-plus@3.0">
+    <url>/userContent/chocolate-pieces.png</url>
+  </icon>
+  <orphanedItemStrategy class="com.cloudbees.hudson.plugins.folder.computed.DefaultOrphanedItemStrategy" plugin="cloudbees-folder@5.13">
+    <pruneDeadBranches>true</pruneDeadBranches>
+    <daysToKeep>-1</daysToKeep>
+    <numToKeep>10</numToKeep>
+  </orphanedItemStrategy>
+  <triggers>
+    <com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger plugin="cloudbees-folder@5.13">
+      <spec>* * * * *</spec>
+      <interval>60000</interval>
+    </com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger>
+  </triggers>
+  <sources class="jenkins.branch.MultiBranchProject$BranchSourceList" plugin="branch-api@1.11.1">
+    <data>
+      <jenkins.branch.BranchSource>
+        <source class="jenkins.plugins.git.GitSCMSource" plugin="git@3.0.0">
+          <id>87db64be-7f0d-4164-bf63-88e826775e4a</id>
+          <remote>go82pl@pl-esi-builddev:/opt/git/pipeline-chocolate.git</remote>
+          <credentialsId>Harald</credentialsId>
+          <includes>*</includes>
+          <excludes></excludes>
+          <ignoreOnPushNotifications>false</ignoreOnPushNotifications>
+          <extensions>
+            <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
+          </extensions>
+        </source>
+        <strategy class="jenkins.branch.DefaultBranchPropertyStrategy">
+          <properties class="empty-list"/>
+        </strategy>
+      </jenkins.branch.BranchSource>
+    </data>
+    <owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
+  </sources>
+  <factory class="org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory">
+    <owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
+  </factory>
+</org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject>

@@ -1,0 +1,51 @@
+#!groovy
+
+// chocolate configuration
+cocoa=30
+white=false
+sugar=65
+nuts=true
+almonds=false
+orange=false
+vanilla=true
+chili=false
+fairtrade=true
+organic=true
+
+// test configuation
+acceptanceCriteria='nuts'
+
+// packaging configuration
+noAluminium=true
+boxSize=10
+hauler='DHL'
+
+// example 1: stage not included in shared lib
+stage ('Production') {
+    chocolateProduction (cocoa, white, sugar, nuts, almonds, orange, vanilla, chili, fairtrade, organic)
+}
+
+// example 2: stage included in shared lib
+chocolateTest (acceptanceCriteria)
+
+stage ('Packaging') {
+    node ('Tools:packaging') {
+        echo "Wrapping the chocolate bar now into ${noAluminium.toBoolean() ? 'plastic' : 'aluminium'} foil"
+        echo 'Wrapping the chocolate bar now into paper'
+        echo "Packaging $boxSize chocolate bars into a box"
+    }
+}
+
+stage ('Manual Approval') {
+    if (env.BUILD_NUMBER.toInteger() % 10 == 0) {
+        timeout(time: 1, unit: 'HOURS') {
+        input message: 'Is this chocolate packed OK and tasty?'
+        }
+    }
+}
+
+stage ('Delivery') {
+    node ('Tools:delivery') {
+        echo "Delivering boxes to $hauler..."
+    }
+}
